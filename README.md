@@ -5,7 +5,6 @@ A modern, responsive event discovery and registration web application developed 
 ## 🌐 Project Links
 - **Live Deployment:** [https://kitonah.github.io/k-explore-events/](https://kitonah.github.io/k-explore-events/)
 - **GitHub Repository:** [https://github.com/Kitonah/k-explore-events](https://github.com/Kitonah/k-explore-events)
-- **Project Report (PDF):** [Download k_explore_project_report.pdf](./k_explore_project_report.pdf)
 
 ---
 
