@@ -1,0 +1,120 @@
+/* Outlined text utility */
+.text-stroke {
+  -webkit-text-stroke: 1.5px #09090b;
+}
+.dark .text-stroke {
+  -webkit-text-stroke: 1.5px #f4f4f5;
+}
+
+/* Category Filter Pills */
+.category-pill {
+  padding: 0.35rem 0.8rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: transparent;
+  border: 1px solid #e4e4e7;
+  color: #71717a;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.dark .category-pill {
+  border-color: #27272a;
+  color: #a1a1aa;
+}
+
+.category-pill:hover {
+  border-color: #ff007f;
+  color: #ff007f;
+}
+
+.active-category {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+}
+
+.dark .active-category {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+  border-color: #ffffff !important;
+}
+
+/* Minimal Event Cards */
+.screenprint-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .screenprint-card {
+  background-color: #121215;
+  border-color: #27272a;
+}
+
+.screenprint-card:hover {
+  border-color: #ff007f;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -10px rgba(255, 0, 127, 0.15);
+}
+
+.dark .screenprint-card:hover {
+  border-color: #ff007f;
+  box-shadow: 0 12px 28px -10px rgba(255, 0, 127, 0.25);
+}
+
+/* Soft Clean Inputs */
+.clean-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  border-radius: 0.65rem;
+  background-color: #fafaf8;
+  border: 1px solid #d4d4d8;
+  color: #09090b;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dark .clean-input {
+  background-color: #18181c;
+  border-color: #2e2e35;
+  color: #f4f4f5;
+}
+
+.clean-input:focus {
+  border-color: #ff007f;
+  box-shadow: 0 0 0 2px rgba(255, 0, 127, 0.15);
+}
+
+/* Ticker Animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-content {
+  animation: ticker 28s linear infinite;
+  display: inline-flex;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}

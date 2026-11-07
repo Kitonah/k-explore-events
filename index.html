@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K-EXPLORE — Campus Event Management & Registration Portal</title>
+
+  <!-- Prevent FOUC theme flash -->
+  <script>
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Anton', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            neon: '#ff007f',       /* Electric Magenta */
+            paper: '#fafaf8',      /* Clean Neutral Surface */
+            ink: '#09090b',
+            cardDark: '#121215',
+            void: '#0a0a0c',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-paper text-ink dark:bg-void dark:text-zinc-100 min-h-screen flex flex-col font-sans selection:bg-neon selection:text-white transition-colors duration-200 overflow-x-hidden">
+
+  <!-- Toast Notification Hub -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none" aria-live="polite"></div>
+
+  <!-- Marquee Ticker -->
+  <div class="bg-ink text-paper dark:bg-zinc-900 dark:text-zinc-300 py-1.5 overflow-hidden whitespace-nowrap border-b border-zinc-200 dark:border-zinc-800 font-mono text-[10px] tracking-widest uppercase flex select-none">
+    <div class="marquee-content flex gap-8">
+      <span>★ K-EXPLORE 2026</span>
+      <span>•</span>
+      <span>CAMPUS EVENT MANAGEMENT PORTAL</span>
+      <span>•</span>
+      <span>STUDENT REGISTRATIONS ACTIVE</span>
+      <span>•</span>
+      <span>NATIONAL HACKATHON • VALORANT ESPORTS • AI SUMMIT • CULTURAL NIGHTS</span>
+      <span>•</span>
+      <span>INSTANT PASS VERIFICATION</span>
+    </div>
+    <div class="marquee-content flex gap-8" aria-hidden="true">
+      <span>★ K-EXPLORE 2026</span>
+      <span>•</span>
+      <span>CAMPUS EVENT MANAGEMENT PORTAL</span>
+      <span>•</span>
+      <span>STUDENT REGISTRATIONS ACTIVE</span>
+      <span>•</span>
+      <span>NATIONAL HACKATHON • VALORANT ESPORTS • AI SUMMIT • CULTURAL NIGHTS</span>
+      <span>•</span>
+      <span>INSTANT PASS VERIFICATION</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="border-b border-zinc-200 dark:border-zinc-800/80 bg-paper/90 dark:bg-void/90 backdrop-blur-md px-4 sm:px-8 py-4 sticky top-0 z-30">
+    <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+      
+      <div class="flex items-center gap-3">
+        <a href="#" class="font-display text-3xl sm:text-4xl tracking-tight uppercase text-ink dark:text-white leading-none hover:text-neon transition">
+          K—EXPLORE<span class="text-neon">.</span>
+        </a>
+        <span class="hidden sm:inline-block font-mono text-[10px] uppercase text-zinc-400 pl-3 border-l border-zinc-300 dark:border-zinc-800">
+          Campus Events 2026
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4 font-mono text-xs">
+        <button id="view-tickets-header-btn" class="px-3.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-ink dark:hover:border-white transition flex items-center gap-2">
+          <span>My Passes</span>
+          <span id="ticket-count-badge" class="px-1.5 py-0.2 rounded-full bg-neon text-white font-bold text-[10px]">0</span>
+        </button>
+
+        <button id="hero-quick-btn" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-lg bg-ink hover:bg-neon text-white dark:bg-white dark:text-ink dark:hover:bg-neon dark:hover:text-white font-bold transition">
+          Featured Event ↓
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-[1600px] mx-auto w-full px-4 sm:px-8 py-8 sm:py-12">
+
+    <!-- Hero Section with Live Countdown -->
+    <section class="border-b border-zinc-200 dark:border-zinc-800/80 pb-12 mb-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 font-mono text-[10px] text-zinc-600 dark:text-zinc-300 font-medium uppercase mb-4">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Live Campus Portal • Active Reservations</span>
+          </div>
+          <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-ink dark:text-white leading-[0.96]">
+            DISCOVER, ATTEND & <br>
+            <span class="text-stroke text-transparent hover:text-neon transition duration-300">EXPERIENCE</span> CAMPUS LIFE<span class="text-neon">.</span>
+          </h1>
+          <p class="font-sans text-sm sm:text-base mt-4 max-w-xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
+            Explore upcoming university hackathons, esports arenas, technical workshops, and live cultural evenings. Select your event and reserve your verified pass in seconds.
+          </p>
+        </div>
+
+        <!-- Featured Countdown Box -->
+        <div class="lg:col-span-5">
+          <div class="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-cardDark rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-mono text-[10px] text-neon font-bold uppercase tracking-wider">Next Major Event</span>
+              <span class="font-mono text-[10px] text-zinc-400">Live Countdown</span>
+            </div>
+
+            <h2 id="featured-title" class="font-display text-2xl uppercase tracking-wide text-ink dark:text-white">
+              KIIT National Hackathon 2026
+            </h2>
+            <p id="featured-meta" class="font-mono text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              📍 Auditorium Campus 3 • November 20, 2026
+            </p>
+
+            <!-- Minimalist Timer Grid -->
+            <div class="grid grid-cols-4 gap-2 text-center my-5 py-3 border-y border-zinc-100 dark:border-zinc-800 font-mono">
+              <div class="bg-zinc-50 dark:bg-zinc-900/60 py-2 rounded-lg">
+                <span id="timer-days" class="block font-display text-2xl sm:text-3xl text-ink dark:text-white">00</span>
+                <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-sans">Days</span>
+              </div>
+              <div class="bg-zinc-50 dark:bg-zinc-900/60 py-2 rounded-lg">
+                <span id="timer-hours" class="block font-display text-2xl sm:text-3xl text-ink dark:text-white">00</span>
+                <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-sans">Hours</span>
+              </div>
+              <div class="bg-zinc-50 dark:bg-zinc-900/60 py-2 rounded-lg">
+                <span id="timer-minutes" class="block font-display text-2xl sm:text-3xl text-ink dark:text-white">00</span>
+                <span class="text-[9px] uppercase tracking-wider text-zinc-400 font-sans">Mins</span>
+              </div>
+              <div class="bg-zinc-50 dark:bg-zinc-900/60 py-2 rounded-lg border border-neon/30">
+                <span id="timer-seconds" class="block font-display text-2xl sm:text-3xl text-neon">00</span>
+                <span class="text-[9px] uppercase tracking-wider text-neon font-sans font-bold">Secs</span>
+              </div>
+            </div>
+
+            <button id="featured-register-trigger" class="w-full py-2.5 rounded-xl bg-ink hover:bg-neon text-white dark:bg-white dark:text-ink dark:hover:bg-neon dark:hover:text-white font-mono text-xs uppercase tracking-wider font-bold transition">
+              Register for Featured Event →
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Filters & Search Bar -->
+    <section id="events-section" class="mb-10">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4">
+        
+        <!-- Category Filter Pills -->
+        <div class="flex flex-wrap items-center gap-1.5" id="category-filters">
+          <button data-category="All" class="category-pill active-category">
+            All Events (8)
+          </button>
+          <button data-category="Tech" class="category-pill">
+            Tech & Coding
+          </button>
+          <button data-category="Cultural" class="category-pill">
+            Cultural & Arts
+          </button>
+          <button data-category="Workshop" class="category-pill">
+            Workshops
+          </button>
+          <button data-category="Sports" class="category-pill">
+            Sports & Gaming
+          </button>
+        </div>
+
+        <!-- Clean Minimal Search -->
+        <div class="relative w-full md:w-64">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search events, venues..."
+            class="w-full bg-white dark:bg-cardDark border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-1.5 text-xs font-mono text-ink dark:text-white placeholder-zinc-400 focus:outline-none focus:border-neon transition"
+          />
+        </div>
+
+      </div>
+
+      <!-- Events Card Grid -->
+      <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden text-center py-16 border border-dashed border-zinc-300 dark:border-zinc-800 rounded-2xl bg-white/40 dark:bg-cardDark/40 my-6">
+        <p class="font-display text-2xl uppercase tracking-wider text-zinc-600 dark:text-zinc-300">No Events Found</p>
+        <p class="font-sans text-xs text-zinc-400 mt-1">Try tweaking your search term or select another category.</p>
+        <button id="reset-filters-btn" class="mt-4 px-4 py-2 rounded-lg bg-ink text-white dark:bg-white dark:text-ink font-mono text-xs uppercase font-bold hover:bg-neon dark:hover:bg-neon dark:hover:text-white transition">
+          Reset All Filters
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Floating Capsule Dock -->
+  <aside class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-ink/95 text-paper dark:bg-white/95 dark:text-ink px-4 py-2 rounded-full border border-zinc-800 dark:border-zinc-200 shadow-2xl backdrop-blur-md flex items-center gap-4 font-mono text-xs select-none">
+    <a href="#" class="font-bold tracking-wider hover:text-neon transition">
+      K—EXPLORE
+    </a>
+    <span class="text-zinc-500">|</span>
+    <button id="dock-tickets-btn" class="hover:text-neon transition flex items-center gap-1.5 font-bold">
+      <span>My Passes</span>
+      <span id="ticket-badge" class="px-1.5 py-0.2 rounded-full bg-neon text-white text-[10px]">0</span>
+    </button>
+    <span class="text-zinc-500">|</span>
+    <button id="theme-toggle" class="hover:text-neon transition font-bold" aria-label="Toggle Theme">
+      <span id="theme-text">DARK</span>
+    </button>
+  </aside>
+
+  <!-- 2-Column Responsive Modal (Fits viewports without cutoffs) -->
+  <div id="event-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="bg-white dark:bg-cardDark border border-zinc-200 dark:border-zinc-800 rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl my-auto transition-all relative max-h-[90vh] flex flex-col md:flex-row">
+      
+      <!-- Close Button -->
+      <button id="modal-close-btn" class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-neon text-white flex items-center justify-center font-mono text-xs transition">
+        ✕
+      </button>
+
+      <!-- Left Column: Details & Overview -->
+      <div class="md:w-5/12 bg-zinc-50 dark:bg-zinc-900/60 p-5 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 shrink-0">
+        <div>
+          <div class="relative h-44 w-full rounded-xl overflow-hidden bg-zinc-900 mb-4">
+            <img id="modal-img" src="" alt="" class="w-full h-full object-cover" />
+            <span id="modal-category" class="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold uppercase tracking-wider bg-black/80 text-white backdrop-blur-sm"></span>
+          </div>
+
+          <span id="modal-code" class="font-mono text-[10px] text-neon font-bold uppercase tracking-wider block mb-1"></span>
+          <h3 id="modal-title" class="font-display text-2xl uppercase tracking-tight text-ink dark:text-white leading-tight"></h3>
+          
+          <div class="mt-2 space-y-0.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+            <p id="modal-date" class="font-medium text-ink dark:text-zinc-200"></p>
+            <p id="modal-venue" class="truncate"></p>
+          </div>
+
+          <p id="modal-desc" class="mt-3 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans line-clamp-4"></p>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-800 font-mono text-[10px] text-zinc-400 flex items-center justify-between">
+          <span>● Verified Registration</span>
+          <span>Instant Pass Issued</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Registration Form -->
+      <div class="md:w-7/12 p-6 flex flex-col justify-center">
+        <div>
+          <h4 class="font-display text-xl uppercase text-ink dark:text-white tracking-wide">Event Registration</h4>
+          <p class="font-sans text-xs text-zinc-500 mb-3">Provide your details to reserve your seat.</p>
+        </div>
+
+        <form id="registration-form" novalidate class="space-y-2.5 font-sans">
+          <!-- Selected Event (Assignment requirement) -->
+          <div>
+            <label for="reg-event-display" class="block font-mono text-[10px] uppercase font-bold text-zinc-400 mb-1">Selected Event</label>
+            <input type="text" id="reg-event-display" readonly class="clean-input bg-zinc-100 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 cursor-not-allowed font-medium" />
+          </div>
+
+          <div>
+            <label for="reg-name" class="block font-mono text-[10px] uppercase font-bold text-zinc-500 mb-1">Participant's Name</label>
+            <input type="text" id="reg-name" required placeholder="Alex Blais" class="clean-input" />
+            <p id="err-name" class="font-mono text-[10px] text-neon font-semibold mt-0.5 hidden">Please enter your legal name (min 3 characters).</p>
+          </div>
+
+          <div>
+            <label for="reg-email" class="block font-mono text-[10px] uppercase font-bold text-zinc-500 mb-1">Email Address</label>
+            <input type="email" id="reg-email" required placeholder="alex@domain.com" class="clean-input" />
+            <p id="err-email" class="font-mono text-[10px] text-neon font-semibold mt-0.5 hidden">Please enter a valid email address.</p>
+          </div>
+
+          <div>
+            <label for="reg-phone" class="block font-mono text-[10px] uppercase font-bold text-zinc-500 mb-1">Phone Number (10 digits)</label>
+            <input type="tel" id="reg-phone" required placeholder="9876543210" class="clean-input" />
+            <p id="err-phone" class="font-mono text-[10px] text-neon font-semibold mt-0.5 hidden">Enter a valid 10-digit mobile number.</p>
+          </div>
+
+          <input type="hidden" id="reg-event-id" />
+          <input type="hidden" id="reg-event-name" />
+
+          <!-- Visible Submit Button -->
+          <button type="submit" id="reg-submit-btn" class="mt-4 w-full py-2.5 rounded-xl bg-neon hover:bg-ink text-white font-mono text-xs uppercase tracking-wider font-bold transition shadow-lg shadow-neon/20">
+            Submit Registration Pass →
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tickets Drawer Modal -->
+  <div id="tickets-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-cardDark border border-zinc-200 dark:border-zinc-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
+        <div>
+          <h3 class="font-display text-2xl uppercase">Registered Passes</h3>
+          <p class="font-mono text-[11px] text-zinc-400">Stored in browser LocalStorage</p>
+        </div>
+        <button id="tickets-close-btn" class="w-7 h-7 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-neon hover:text-white flex items-center justify-center text-xs font-mono transition">
+          ✕
+        </button>
+      </div>
+      <div id="tickets-list" class="mt-4 space-y-2.5 max-h-72 overflow-y-auto pr-1">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-zinc-200 dark:border-zinc-800/80 bg-paper dark:bg-void py-8 px-4 sm:px-8 font-mono text-xs text-zinc-500">
+    <div class="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <p>© 2026 K-EXPLORE // Web Designing Assignment.</p>
+      <p class="text-[11px]">HTML5 • TAILWIND CSS • VANILLA JS</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
